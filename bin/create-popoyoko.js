@@ -12,7 +12,7 @@ const rl = readline.createInterface({
 
 rl.question('Please specify the project directory:', (projectName) => {
     if (!projectName) {
-        projectName = 'Popoyoko-UI-Boilerplate';
+        projectName = 'create-popoyoko';
 
     }
 
