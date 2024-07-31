@@ -32,5 +32,12 @@ bun :
 ```bash
 bun create popoyoko
 ```
+OR
+
+bunx :
+
+```bash
+bunx create-popoyoko
+```
 
 Uses the Popoyoko-UI-Token-Generator to create your tokens 
