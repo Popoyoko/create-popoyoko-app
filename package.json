@@ -1,6 +1,6 @@
 {
     "name": "create-popoyoko",
-    "version": "0.1.3",
+    "version": "0.1.7",
     "description": "CLI to create a boilerplate Popoyoko project",
     "main": "bin/create-popoyoko.js",
     "bin": {

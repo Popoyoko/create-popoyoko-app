@@ -25,38 +25,23 @@ function askQuestion(query) {
         }
 
         console.log('Creating Vite app...');
-        execSync(`bun create vite ${projectName}`, { stdio: 'inherit' });
+        execSync(`bun create vite ${projectName} --template react-ts `, { stdio: 'inherit' });
 
         process.chdir(projectPath);
 
-        const installPopoyokoUI = await askQuestion('Do you want to install popoyoko-ui? (yes/no) ');
-        if (installPopoyokoUI.toLowerCase() === 'yes') {
-            console.log('Installing popoyoko-ui...');
-            execSync('bun i https://github.com/Popoyoko/popoyoko-ui.git#package', { stdio: 'inherit' });
-        }
+        console.log('Installing popoyoko-ui...');
+        execSync('bun i https://github.com/Popoyoko/popoyoko-ui.git#package', { stdio: 'inherit' });
 
-        const installCreatePopoyokoTokens = await askQuestion('Do you want to install create-popoyoko-tokens? (yes/no) ');
-        if (installCreatePopoyokoTokens.toLowerCase() === 'yes') {
-            console.log('Installing create-popoyoko-tokens...');
-            execSync('bun i create-popoyoko-tokens', { stdio: 'inherit' });
-        }
+        console.log('Installing create-popoyoko-tokens...');
+        execSync('bun i create-popoyoko-tokens', { stdio: 'inherit' });
 
-        const hasTokenDirectory = await askQuestion('Do you have a token directory? (yes/no) ');
-        if (hasTokenDirectory.toLowerCase() === 'no') {
-            const createTokenDir = await askQuestion('Do you want to create one together or use default tokens? (together/default) ');
-            if (createTokenDir.toLowerCase() === 'together') {
-                console.log('Creating token directory together...');
-               } else {
-                console.log('Using default tokens...');
-            }
-        } else {
-            console.log('Token directory exists.');
-        }
+        console.log('Initialization of popoyoko token...');
 
-        const installStorybook = await askQuestion('Do you want to install Storybook? (yes/no) ');
-        if (installStorybook.toLowerCase() === 'yes') {
+
+        const installStorybook = await askQuestion('Do you want to install Storybook? (no/yes) ') || 'no';
+        if (installStorybook === 'yes' || installStorybook === 'y') {
             console.log('Installing Storybook...');
-            execSync('npx storybook init', { stdio: 'inherit' });
+            execSync('bunx storybook init --skip-install', { stdio: 'inherit' });
         }
 
         console.log(`Project ${projectName} created successfully!`);
