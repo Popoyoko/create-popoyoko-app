@@ -1,15 +1,19 @@
 {
     "name": "create-popoyoko",
-    "version": "0.1.7",
+    "version": "0.2.10",
     "description": "CLI to create a boilerplate Popoyoko project",
     "main": "bin/create-popoyoko.js",
+    "type": "module",
     "bin": {
-      "boilerplate": "./bin/create-popoyoko.js"
+        "create-popoyoko": "./bin/create-popoyoko.js"
     },
     "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "license": "MIT",
-    "type": "commonjs"
-  }
-  
+    "dependencies": {
+        "kolorist": "^1.8.0",
+        "minimist": "^1.2.8",
+        "prompts": "^2.4.2"
+    }
+}
