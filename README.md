@@ -1,22 +1,15 @@
-# create-popoyoko
-### This repository is a Popoyoko-UI-Boilerplate layer that acts as the CLI
+# create-popoyoko-app
+### create-popoyoko-app is a construction tool designed to provide a complete popoyoko environment.
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-## This is the **CLI Repo**
-
-This repository is a layer of Popoyoko-UI-Boilerplate.
-
-
-📦 [Popoyoko-UI-Boilerplate](https://github.com/Popoyoko/Popoyoko-UI-Boilerplate) <= Here is the boilerplate of popoyoko
-
-
+## This is the **Construction tool Repo**
 
 📦 [popoyoko-ui **package branch**](https://github.com/Popoyoko/popoyoko-ui/tree/package) <= Here is the build of the component library
 
 🕹️ [Here is the **storybook**](https://popoyoko.github.io/popoyoko-ui/) <= Here's the Storybook for viewing components
 
-📦 [Popoyoko-UI-Token-Generator](https://github.com/Popoyoko/popoyoko-ui/tree/dev-package) <= Here is the token generator
+📦 [create-popoyoko-variables](https://github.com/Popoyoko/create-popoyoko-variables) <= Here is the variables generator
 
 
 ## Scaffolding Your First Popoyoko Project :
@@ -40,4 +33,4 @@ bunx :
 bunx create-popoyoko
 ```
 
-Uses the Popoyoko-UI-Token-Generator to create your tokens 
+Uses the create-popoyoko-variables to create your tokens 
