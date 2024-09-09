@@ -48,8 +48,8 @@ async function createProject() {
   console.log(`Installing ${blue('popoyoko-ui')}...`);
   execSync('bun i https://github.com/Popoyoko/popoyoko-ui.git#package', { stdio: 'inherit' });
 
-  console.log(`Installing ${blue('create-popoyoko-tokens')}...`);
-  execSync('bun i create-popoyoko-tokens', { stdio: 'inherit' });
+  console.log(`Installing ${blue('create-popoyoko-variables')}...`);
+  execSync('bun i create-popoyoko-variables', { stdio: 'inherit' });
 
   console.log(`Installing ${blue('popoyoko-default-tokens')} from popoyoko-branding...`);
   execSync('git clone --branch popoyoko-default-tokens https://github.com/Popoyoko/popoyoko-branding.git', { stdio: 'inherit' });
