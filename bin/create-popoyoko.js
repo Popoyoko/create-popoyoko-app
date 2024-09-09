@@ -51,9 +51,17 @@ async function createProject() {
   console.log(`Installing ${blue('create-popoyoko-tokens')}...`);
   execSync('bun i create-popoyoko-tokens', { stdio: 'inherit' });
 
+  console.log(`Installing ${blue('popoyoko-default-tokens')} from popoyoko-branding...`);
+  execSync('git clone --branch popoyoko-default-tokens https://github.com/Popoyoko/popoyoko-branding.git', { stdio: 'inherit' });
+
+  console.log(`Compiling tokens using ${blue('create-popoyoko-tokens')}...`);
+  execSync('bun i && create-popoyoko-variables ./popoyoko-default-tokens', { stdio: 'inherit' });
+
+  console.log(`Deleted folder ${blue('popoyoko-default-tokens')}...`);
+  fs.rmSync('./popoyoko-default-tokens', { recursive: true, force: true });
+
   console.log(`Initialization of ${blue('popoyoko')} token...`);
 
-  // Questions interactives
   const { installStorybook } = await prompts({
     type: 'select',
     name: 'installStorybook',
