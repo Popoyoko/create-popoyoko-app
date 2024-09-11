@@ -1,6 +1,6 @@
 {
     "name": "create-popoyoko",
-    "version": "0.2.13",
+    "version": "0.2.14",
     "description": "CLI to create a boilerplate Popoyoko project",
     "main": "bin/create-popoyoko.js",
     "type": "module",
