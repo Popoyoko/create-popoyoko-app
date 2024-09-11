@@ -60,6 +60,10 @@ async function createProject() {
   console.log(`Deleted folder ${blue('popoyoko-branding')}...`);
   fs.rmSync('./popoyoko-branding', { recursive: true, force: true });
 
+  console.log(`Delete eslint...`);
+  fs.rmSync('./eslint.config.js', { recursive: true, force: true });
+  execSync('bun remove eslint @eslint/js eslint-plugin-react-hooks eslint-plugin-react-refresh typescript-eslint', { stdio: 'inherit' });
+
   console.log(`Initialization of ${blue('popoyoko')} token...`);
 
   const { installStorybook } = await prompts({
