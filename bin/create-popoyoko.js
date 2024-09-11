@@ -55,10 +55,10 @@ async function createProject() {
   execSync('git clone --branch popoyoko-default-tokens https://github.com/Popoyoko/popoyoko-branding.git', { stdio: 'inherit' });
 
   console.log(`Compiling tokens using ${blue('create-popoyoko-tokens')}...`);
-  execSync('bun i && create-popoyoko-variables ./popoyoko-default-tokens', { stdio: 'inherit' });
+  execSync('bun i && create-popoyoko-variables ./popoyoko-branding', { stdio: 'inherit' });
 
-  console.log(`Deleted folder ${blue('popoyoko-default-tokens')}...`);
-  fs.rmSync('./popoyoko-default-tokens', { recursive: true, force: true });
+  console.log(`Deleted folder ${blue('popoyoko-branding')}...`);
+  fs.rmSync('./popoyoko-branding', { recursive: true, force: true });
 
   console.log(`Initialization of ${blue('popoyoko')} token...`);
 
