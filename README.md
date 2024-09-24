@@ -1,7 +1,6 @@
-# create-popoyoko-app
-### create-popoyoko-app is a construction tool designed to provide a complete popoyoko environment.
-
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+# create-popoyoko-app is a construction tool designed to provide a complete popoyoko environment.
 
 ## This is the **Construction tool Repo**
 
@@ -14,23 +13,8 @@
 
 ## Scaffolding Your First Popoyoko Project :
 
-npm :
-
-```bash
-npm create popoyoko
-```
-
 bun :
 
 ```bash
-bun create popoyoko
+bun create popoyoko/create-popoyoko-app
 ```
-OR
-
-bunx :
-
-```bash
-bunx create-popoyoko
-```
-
-Uses the create-popoyoko-variables to create your tokens 
