@@ -12,6 +12,8 @@
     },
     "license": "MIT",
     "dependencies": {
+        "build-tokens": "git@github.com:Popoyoko/build-tokens.git",
+        "configuration": "git@github.com:Popoyoko/config-biome.git",
         "kolorist": "^1.8.0",
         "minimist": "^1.2.8",
         "prompts": "^2.4.2"

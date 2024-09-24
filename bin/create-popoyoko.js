@@ -1,97 +1,138 @@
 #!/usr/bin/env node
-
-import { execSync } from 'child_process';
-import path from 'node:path';
-import fs from 'node:fs';
-import prompts from 'prompts';
-import { blue, green, red, reset } from 'kolorist';
-import minimist from 'minimist';
+import { buildTokens } from "build-tokens";
+import { execSync } from "child_process";
+import path from "node:path";
+import fs from "node:fs";
+import prompts from "prompts";
+import { blue, green, red, reset } from "kolorist";
+import minimist from "minimist";
 
 const argv = minimist(process.argv.slice(2), {
-  default: { help: false },
-  alias: { h: 'help' }
+	default: { help: false },
+	alias: { h: "help" },
 });
 
 const helpMessage = `
-Usage: ${blue('create-popoyoko')} [DIRECTORY]
+Usage: ${blue("create-popoyoko")} [DIRECTORY]
 
 Options:
   -h, --help       Afficher ce message d'aide
 `;
 
-
 if (argv.help) {
-  console.log(helpMessage);
-  process.exit(0);
+	console.log(helpMessage);
+	process.exit(0);
 }
 
 async function createProject() {
-  const { projectName } = await prompts({
-    type: 'text',
-    name: 'projectName',
-    message: 'Please specify the project directory:',
-    initial: 'create-popoyoko'
-  });
+	const { projectName } = await prompts({
+		type: "text",
+		name: "projectName",
+		message: "Please specify the project directory:",
+		initial: "my-amazing-app",
+	});
 
-  const projectPath = path.resolve(process.cwd(), projectName);
-
-  if (fs.existsSync(projectPath)) {
-    console.error(`Directory ${projectName} already exists.`);
-    process.exit(1);
+	const appContent = `
+  import { useState } from 'react'
+  import './App.css'
+  
+  import { Button } from 'popoyoko-ui'
+  
+  function App() {
+  
+    return (
+      <>
+        <h1>${projectName}</h1>
+        <Button><a href="https://github.com/Popoyoko/popoyoko-ui">Get Started !</a></Button>
+      </>
+    )
   }
+  
+  export default App
+  `;
 
-  console.log(`Creating Vite app...`);
-  execSync(`bun create vite ${projectName} --template react-ts`, { stdio: 'inherit' });
+	const projectPath = path.resolve(process.cwd(), projectName);
 
-  process.chdir(projectPath);
+	if (fs.existsSync(projectPath)) {
+		console.log(`Directory ${projectName} already exists.`);
+		const { deleteOldFolder } = await prompts({
+			type: "confirm",
+			name: "deleteOldFolder",
+			message: "Delete folder ?",
+		});
 
-  console.log(`Installing ${blue('popoyoko-ui')}...`);
-  execSync('bun i https://github.com/Popoyoko/popoyoko-ui.git#package', { stdio: 'inherit' });
+		if (deleteOldFolder) {
+			execSync(`rm -rf ${projectName}`, { stdio: "inherit" });
+		} else {
+			process.exit(1);
+		}
+	}
 
-  console.log(`Installing ${blue('create-popoyoko-variables')}...`);
-  execSync('bun i create-popoyoko-variables', { stdio: 'inherit' });
+	console.log(`Creating Vite app...`);
+	execSync(`bun create vite ${projectName} --template react-ts`, {
+		stdio: "inherit",
+	});
 
-  console.log(`Installing ${blue('popoyoko-default-tokens')} from popoyoko-branding...`);
-  execSync('git clone --branch popoyoko-default-tokens https://github.com/Popoyoko/popoyoko-branding.git', { stdio: 'inherit' });
+	process.chdir(projectPath);
 
-  console.log(`Compiling tokens using ${blue('create-popoyoko-tokens')}...`);
-  execSync('bun i && create-popoyoko-variables ./popoyoko-branding', { stdio: 'inherit' });
+	console.log(`Installing ${blue("popoyoko-ui")}...`);
+	execSync("bun add https://github.com/Popoyoko/popoyoko-ui.git#package", {
+		stdio: "inherit",
+	});
 
-  console.log(`Deleted folder ${blue('popoyoko-branding')}...`);
-  fs.rmSync('./popoyoko-branding', { recursive: true, force: true });
+	console.log(`Installing ${blue("build-token")}...`);
+	execSync("bun add git@github.com:Popoyoko/build-tokens.git", {
+		stdio: "inherit",
+	});
 
-  console.log(`Delete eslint...`);
-  fs.rmSync('./eslint.config.js', { recursive: true, force: true });
-  execSync('bun remove eslint @eslint/js eslint-plugin-react-hooks eslint-plugin-react-refresh typescript-eslint', { stdio: 'inherit' });
+	console.log(`Installing ${blue("default-tokens")} from popoyoko-branding...`);
+	execSync(
+		"git clone https://github.com/Popoyoko/popoyoko-branding.git && mv popoyoko-branding branding",
+		{ stdio: "inherit" },
+	);
 
-  console.log(`Initialization of ${blue('popoyoko')} token...`);
+	console.log(`Compiling tokens using ${blue("create-popoyoko-tokens")}...`);
+	buildTokens("branding/tokens");
 
-  const { installStorybook } = await prompts({
-    type: 'select',
-    name: 'installStorybook',
-    message: 'Do you want to install Storybook?',
-    choices: [
-      { title: green('Yes'), value: 'yes' },
-      { title: red('No'), value: 'no' }
-    ],
-    initial: 1 
-  });
+	console.log(`Compiling tokens using ${blue("create-popoyoko-tokens")}...`);
+	const appTsxPath = path.join(projectPath, "src", "App.tsx");
 
-  if (installStorybook === 'yes') {
-    console.log(`Installing Storybook...`);
-    execSync('bunxx sb init --skip-install', { stdio: 'inherit' });
-    execSync('bun i', { stdio: 'inherit' }); 
-    console.log('Storybook installed successfully.');
-    console.log('To start Storybook: bunx storybook');
-  }
+	fs.writeFileSync(appTsxPath, appContent);
 
-  console.log(`Project ${projectName} created successfully!`);
-  console.log(`To get started:`);
-  console.log(`  cd ${projectName}`);
-  console.log(`  bun install`);
-  console.log(`  bun dev`);
+	console.log(`Migrating from eslint & Prettier to Biome...`);
+	execSync("bunx biome migrate eslint --write", { stdio: "inherit" });
+
+	console.log(`Extend the Popoyoko's configuration...`);
+	execSync(
+		"bun add --dev --exact @biomejs/biome && bun add git@github.com:Popoyoko/config-biome.git",
+		{ stdio: "inherit" },
+	);
+
+	const { installStorybook } = await prompts({
+		type: "select",
+		name: "installStorybook",
+		message: "Do you want to install Storybook?",
+		choices: [
+			{ title: green("Yes"), value: "yes" },
+			{ title: red("No"), value: "no" },
+		],
+		initial: 1,
+	});
+
+	if (installStorybook === "yes") {
+		console.log(`Installing Storybook...`);
+		execSync("bunx sb init --skip-install", { stdio: "inherit" });
+		console.log("Storybook installed successfully.");
+		console.log("To start Storybook: bunx storybook");
+	}
+
+	console.log(`Project ${projectName} created successfully!`);
+	console.log(`To get started:`);
+	console.log(`cd ${projectName}`);
+	console.log(`bun run dev`);
 }
 
-createProject().catch(error => {
-  console.error('Error creating project:', error);
+createProject().catch((error) => {
+	console.error("Error creating project, removing the project folder:", error);
+	execSync(`rm -rf ${projectName}`, { stdio: "inherit" });
 });
